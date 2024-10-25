@@ -95,6 +95,6 @@ This project is licensed under the MIT License - see the [LICENSE](https://githu
 
 **KRajiH** - [helloji@duck.com](mailto:helloji@duck.com)
 
-Project Link: [H.Notepad](https://github.com/KRajiH/H.Notepad/tree/H.note)
+Project Link: [H.Notepad](https://github.com/KRajiH/H.Notepad)
 
 Project Preview Link : [H.Notepad](https://krajih.github.io/H.Notepad/)
