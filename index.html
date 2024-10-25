@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notepad App</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="apple-touch-icon" sizes="180x180" href="/img/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16x16.png">  
+</head>
+
+<body>
+  <div class="h-main-container">
+    <h1 class="h-appTitle">H.Notepad</h1>
+    <div class="h-noteTitle">
+      <button onclick="saveNote()">Save Note</button> <input type="text" id="noteTitle" placeholder="Note Title" />
+      <button onclick="clearEditor()">Clear Editor</button>
+    </div>
+
+    <div id="message" style="color: green;"></div>
+
+    <div class="row-01 h-toolbar">
+      <button onclick="formatText('bold')">B</button>
+      <button onclick="formatText('italic')">I</button>
+      <button onclick="formatText('underline')">U</button>
+      <button onclick="copyText()">Copy</button>
+      <button class="leftAlignment">Left</button>
+      <button class="centerAlignment">Center</button>
+      <button class="rightAlignment">Right</button>
+      <button class="justifyAlignment">Justify</button>
+
+      <select id="listType">
+        <option value="Set List">Set List</option>
+        <option value="insertUnorderedList">Bullets</option>
+        <option value="insertOrderedList">Numbers</option>
+        <option value="ol-decimal">1, 2, 3</option>
+        <option value="ol-alpha">A, B, C</option>
+        <option value="ol-l-alpha">a, b, c</option>
+        <option value="ol-roman">I, II, III</option>
+        <option value="ol-l-roman">i, ii, iii</option>
+      </select>
+
+
+      <select name="Text Colour" id="textColor">
+        <option value="Color">Color</option>
+        <option value="red">Red</option>
+        <option value="green">Green</option>
+        <option value="Yellow">Yellow</option>
+        <option value="blue">Blue</option>
+        <option value="white">White</option>
+        <option value="black">Black</option>
+        <option value="customColor">Choose</option>
+
+
+      </select>
+      <select name="text size" id="textSize">
+        <option value="10px">10px</option>
+        <option value="11px">11px</option>
+        <option value="12px">12px</option>
+        <option value="13px">13px</option>
+        <option value="14px">14px</option>
+        <option value="15px">15px</option>
+        <option value="16px">16px</option>
+        <option value="17px">17px</option>
+        <option value="18px">18px</option>
+        <option value="19px">19px</option>
+        <option value="20px">20px</option>
+        <option value="21px">21px</option>
+        <option value="22px">22px</option>
+        <option value="23px">23px</option>
+        <option value="24px">24px</option>
+        <option value="25px">25px</option>
+        <option value="26px">26px</option>
+        <option value="27px">27px</option>
+        <option value="28px">28px</option>
+        <option value="29px">29px</option>
+        <option value="30px">30px</option>
+        <option value="31px">31px</option>
+        <option value="32px">32px</option>
+        <option value="33px">33px</option>
+        <option value="34px">34px</option>
+        <option value="35px">35px</option>
+        <option value="36px">36px</option>
+        <option value="37px">37px</option>
+        <option value="38px">38px</option>
+        <option value="39px">39px</option>
+        <option value="40px">40px</option>
+        <option value="41px">41px</option>
+        <option value="42px">42px</option>
+        <option value="43px">43px</option>
+        <option value="44px">44px</option>
+        <option value="45px">45px</option>
+        <option value="46px">46px</option>
+        <option value="47px">47px</option>
+        <option value="48px">48px</option>
+        <option value="49px">49px</option>
+        <option value="50px">50px</option>
+      </select>
+    </div>
+
+    <div id="editor" contenteditable="true" class="h-editor"></div>
+    <div class="h-saveNoteHistory">
+      <h2>Your Saved Notes</h2>
+      <ul id="notesList"></ul>
+    </div>
+
+
+
+    <footer class="h-footer">
+      <p>Copyright &copy; by <span>HRaji</span> All rights reserved</p>
+    </footer>
+  </div>
+  <script src="/js/main.js">main.js</script>
+  
+</body>
+
+</html>
