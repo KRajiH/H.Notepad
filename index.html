@@ -4,11 +4,153 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Notepad App</title>
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="apple-touch-icon" sizes="180x180" href="/img/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16x16.png">  
+  <title>H.Notepad</title>
+  <style>
+    * {
+      margin: 0 0 0 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      width: 100vw;
+      height: auto;
+      font-family: 'Times New Roman', Times, serif;
+      background-color: #ACAEBA;
+      position: relative;
+    }
+
+    button {
+      padding: 05px;
+    }
+
+    .h-main-container {
+      width: 99vw;
+      margin: 02px auto;
+      background: white;
+      padding: 05px;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .h-appTitle {
+      width: 100%;
+      text-align: center;
+      border: 1px solid;
+      font-size: 4vw;
+    }
+
+    .h-noteTitle {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 02px 0px;
+    }
+
+    .h-noteTitle>input {
+      width: 70%;
+      height: 30px;
+      padding: 0px 05px;
+      margin: 0 05px 0 05px;
+    }
+
+    .h-toolbar {
+      margin-bottom: 2px;
+      display: flex;
+      justify-content: space-evenly;
+      align-items: center;
+      position: sticky;
+      z-index: 1000;
+      top: 0;
+      background-color: white;
+    }
+
+    .h-toolbar>select {
+      height: 25px;
+    }
+
+    #textSize {
+      width: 13%;
+    }
+
+    .h-editor {
+      border: 1px solid;
+      height: 750px;
+      padding: 10px;
+      margin-bottom: 10px;
+      overflow-y: scroll;
+    }
+
+    .h-saveNoteHistory {
+      width: 100%;
+    }
+
+    .h-saveNoteHistory>h2 {
+      width: 100%;
+      text-align: center;
+      border-bottom: 3px solid;
+    }
+
+    .h-saveNoteHistory>ul {
+      margin: 05px 0px;
+      padding: 05px;
+      list-style-type: none;
+    }
+
+    .h-saveNoteHistory>ul>li {
+      margin: 05px;
+      padding: 05px;
+    }
+
+    .h-saveNoteHistory>ul>li>button {
+      border: none;
+      padding: 10px 15px;
+    }
+
+    .h-saveNoteHistory>ul>li>button:hover {
+      background: black;
+      color: #FFFFFF;
+    }
+
+    .h-editor ul,
+    .h-editor ol {
+      margin: 0;
+      /* Remove default margin */
+      padding-left: 20px;
+      /* Left padding to indent list items */
+    }
+
+    .h-editor li {
+      margin-bottom: 5px;
+      /* List items के बीच spacing */
+    }
+    .h-footer {
+        width: 100%;
+        padding: 5px 0;
+        text-align: center;
+      }
+
+      .h-footer span {
+        color: red;
+      }
+
+      #message {
+        color: green;
+        display: none;
+        position: fixed;
+        top: 20px;
+        left: 34vw;
+        z-index: 20000;
+        background-color: white;
+        padding: 5px 10px;
+        font-weight: bold;
+        text-transform: capitalize;
+        border: 1px solid rgba(45, 255, 196, 1);
+        border-radius: 10px;
+        box-shadow: 0 0 34px 3px rgba(45, 255, 196, 1);
+        text-align: center;
+      }
+  </style>
 </head>
 
 <body>
@@ -52,6 +194,11 @@
         <option value="white">White</option>
         <option value="black">Black</option>
         <option value="customColor">Choose</option>
+
+
+
+
+
 
 
       </select>
@@ -112,8 +259,239 @@
       <p>Copyright &copy; by <span>HRaji</span> All rights reserved</p>
     </footer>
   </div>
-  <script src="/js/main.js">main.js</script>
-  
+  <script>
+    // script.js
+
+    let currentNoteIndex = null; // To track the current note being edited
+
+    // Function to format text
+    function formatText(command) {
+      document.execCommand(command, false, null);
+    }
+
+
+    // Copy selected text
+    function copyText() {
+      const selection = window.getSelection().toString();
+      navigator.clipboard.writeText(selection).then(() => {
+        showMessage("Text copied!");
+      });
+    }
+
+    // Save note to local storage
+      function saveNote() {
+      const title = document.getElementById('noteTitle').value;
+      const content = document.getElementById('editor').innerHTML;
+
+      if (title && content) {
+        const notes = JSON.parse(localStorage.getItem('notes')) || [];
+
+        if (currentNoteIndex !== null) {
+          notes[currentNoteIndex] = { title, content };
+          currentNoteIndex = null;
+          showMessage("Note updated");
+        } else {
+          notes.push({ title, content });
+          showMessage("Note saved");
+        }
+
+        localStorage.setItem('notes', JSON.stringify(notes));
+        displayNotes();
+        clearEditor();
+      } else {
+        showMessage("Enter title and content");
+      }
+    }
+
+
+    // Show message
+    function showMessage(msg) {
+      const messageDiv = document.getElementById('message');
+      messageDiv.textContent = msg;
+      messageDiv.style.display = 'block';
+
+      setTimeout(() => {
+        messageDiv.style.display = 'none';
+      }, 2000);
+    }
+
+
+    // Display saved notes
+    function displayNotes() {
+      const notesList = document.getElementById('notesList');
+      notesList.innerHTML = '';
+      const notes = JSON.parse(localStorage.getItem('notes')) || [];
+      notes.forEach((note, index) => {
+        const li = document.createElement('li');
+        li.innerHTML = `<strong>${note.title}</strong> 
+                            <button onclick="openNote(${index})">Edit</button>
+                            <button onclick="exportAsTxt(${index})">TXT</button>
+                            <button onclick="deleteNote(${index})">Del</button>`;
+        notesList.appendChild(li);
+      });
+    }
+
+    // Open note for editing
+    function openNote(index) {
+      const notes = JSON.parse(localStorage.getItem('notes'));
+      document.getElementById('noteTitle').value = notes[index].title;
+      document.getElementById('editor').innerHTML = notes[index].content;
+      currentNoteIndex = index; // Set current note index for editing
+    }
+
+    // Delete note
+    function deleteNote(index) {
+      const notes = JSON.parse(localStorage.getItem('notes'));
+      notes.splice(index, 1);
+      localStorage.setItem('notes', JSON.stringify(notes));
+      displayNotes();
+      showMessage("Note deleted");
+    }
+
+    // Clear the editor
+    function clearEditor() {
+      document.getElementById('noteTitle').value = '';
+      document.getElementById('editor').innerHTML = '';
+      currentNoteIndex = null; // Reset current note index
+    }
+
+    // Clear text selection
+    function clearSelection() {
+      const selection = window.getSelection();
+      selection.removeAllRanges(); // Deselect the text
+    }
+
+    // Export note as TXT
+    function exportAsTxt(index) {
+      const notes = JSON.parse(localStorage.getItem('notes'));
+      const note = notes[index];
+      if (!note.title || !note.content) {
+        showMessage("Note is empty");
+        return;
+      }
+
+      const blob = new Blob([note.content], { type: "text/plain" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = `${note.title}.txt`;
+      link.click();
+      showMessage("Note exported as TXT");
+    }
+
+    // Initialize the app
+    displayNotes();
+
+
+    // Change text color
+    document.getElementById('textColor').addEventListener('change', (e) => {
+      const color = e.target.value;
+      if (color === 'customColor') {
+        const customColor = prompt('Enter custom color (e.g., #ff0000 or red)');
+        document.execCommand('foreColor', false, customColor);
+      } else {
+        document.execCommand('foreColor', false, color);
+      }
+    });
+
+    // Change text size
+    document.getElementById('textSize').addEventListener('change', (e) => {
+      const size = e.target.value;
+      document.execCommand('fontSize', false, 7); // '7' is the maximum execCommand font size.
+      const elements = document.getElementById('editor').getElementsByTagName('font');
+      for (let element of elements) {
+        if (element.size === "7") {
+          element.removeAttribute('size');
+          element.style.fontSize = size;
+        }
+      }
+    });
+
+
+
+
+    // Disable the default context menu on text selection
+    document.getElementById('editor').addEventListener('contextmenu', (event) => {
+      event.preventDefault();
+    });
+
+
+    // Align text to left
+    document.querySelector('.leftAlignment').addEventListener('click', () => {
+      document.execCommand('justifyLeft');
+    });
+
+    // Align text to center
+    document.querySelector('.centerAlignment').addEventListener('click', () => {
+      document.execCommand('justifyCenter');
+    });
+
+    // Align text to right
+    document.querySelector('.rightAlignment').addEventListener('click', () => {
+      document.execCommand('justifyRight');
+    });
+
+    // Align text to justyfy
+    document.querySelector('.justifyAlignment').addEventListener('click', () => {
+      document.execCommand('justifyFull');
+    });
+
+
+
+    // list set karane ke liye
+
+    document.getElementById('listType').addEventListener('change', (e) => {
+      const listType = e.target.value;
+
+      // Editor को focus में लाएं
+      const editor = document.getElementById('editor');
+      editor.focus();
+
+      if (listType === 'insertUnorderedList') {
+        document.execCommand('insertUnorderedList', false, null);
+      } else if (listType === 'insertOrderedList') {
+        document.execCommand('insertOrderedList', false, null);
+      } else {
+        applyCustomListStyle(listType);
+      }
+    });
+
+    function applyCustomListStyle(type) {
+      const editor = document.getElementById('editor');
+      editor.focus();
+
+      // Create a temporary ordered list if not already present
+      let selectedList = editor.querySelector('ol');
+
+      if (!selectedList) {
+        document.execCommand('insertOrderedList', false, null); // Insert a default ordered list
+        selectedList = editor.querySelector('ol'); // Get the newly created list
+      }
+
+      // Apply the chosen style to the ordered list
+      if (selectedList) {
+        switch (type) {
+          case 'ol-decimal':
+            selectedList.style.listStyleType = 'decimal'; // 1, 2, 3...
+            break;
+          case 'ol-roman':
+            selectedList.style.listStyleType = 'upper-roman'; // I, II, III...
+            break;
+          case 'ol-alpha':
+            selectedList.style.listStyleType = 'upper-alpha'; // A, B, C...
+            break;
+          case 'ol-l-alpha':
+            selectedList.style.listStyleType = 'lower-alpha'; // A, B, C...
+            break;
+          case 'ol-l-roman':
+            selectedList.style.listStyleType = 'lower-roman'; // A, B, C...
+            break;
+          default:
+            break;
+        }
+      }
+    }
+  </script>
+
 </body>
 
 </html>
