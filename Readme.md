@@ -2,7 +2,7 @@
 
 **H.Notepad** is a web-based notepad application with rich-text formatting, note-saving capabilities, and an easy-to-use interface. Users can create, format, save, edit, and export notes as `.txt` files directly from their browser.
 
-## Features
+## What are the features of this notepad?
 
 - **Text Formatting**: Options for bold, italic, underline, and alignment (left, center, right, justify).
 - **Customizable Lists**: Add unordered and ordered lists with different styles (decimal, roman numerals, alphabetical, etc.).
@@ -12,7 +12,7 @@
 - **Copy Text**: Copy selected text to the clipboard.
 - **Clear Editor**: Clear the content in the editor for a fresh start.
 
-## Getting Started
+# Getting Started
 
 These instructions will help you set up the project locally for development and testing.
 
@@ -36,7 +36,7 @@ To run H.Notepad, you need a modern web browser (such as Chrome, Firefox, Safari
      open index.html
      ```
 
-### What are the features of this notepad?
+### Usase
 
 1. **Creating a Note**:
    - Type your note title in the "Note Title" field.
